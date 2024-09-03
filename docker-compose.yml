@@ -1,0 +1,59 @@
+services:
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    networks:
+      - app-network
+
+  users-service:
+    build:
+      context: ./services/users-service
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres-users-service
+      - rabbitmq
+    environment:
+      - DATABASE_URL=postgres://user:password@postgres-user:5432/user_db
+      - RABBITMQ_URL=amqp://rabbitmq:5672
+    networks:
+      - app-network
+      - rabbitmq-network
+
+  postgres-users-service:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: users_service
+      POSTGRES_PASSWORD: users_service
+      POSTGRES_DB: users_service_db
+    volumes:
+      - postgres_users_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: 'rabbitmq'
+    ports:
+      - "5672:5672"   # Puerto de RabbitMQ
+      - "15672:15672" # Puerto de la interfaz de administración
+    volumes:
+        - rabbitmq_data:/var/lib/rabbitmq/
+        - rabbitmq_log:/var/log/rabbitmq/
+    networks:
+        - rabbitmq-network
+
+volumes:
+  postgres_users_data:
+  rabbitmq_data:
+  rabbitmq_log:
+
+networks:
+  app-network:
+    driver: bridge
+  rabbitmq-network:
+    driver: bridge
