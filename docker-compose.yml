@@ -15,37 +15,42 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      - postgres-users-service
-      - rabbitmq
+      postgres-users-service:
+        condition: service_healthy
     environment:
-      - DATABASE_URL=postgres://user:password@postgres-user:5432/user_db
-      - RABBITMQ_URL=amqp://rabbitmq:5672
+      - DATABASE_URL=postgres://users_service:password@postgres-users-service:5432/users_service?sslmode=disable
     networks:
       - app-network
-      - rabbitmq-network
 
   postgres-users-service:
-    image: postgres:16
+    image: postgres:latest
     environment:
+      POSTGRES_DB: users_service
       POSTGRES_USER: users_service
-      POSTGRES_PASSWORD: users_service
-      POSTGRES_DB: users_service_db
+      POSTGRES_PASSWORD: password
     volumes:
       - postgres_users_data:/var/lib/postgresql/data
     ports:
       - "5433:5432"
+    networks:
+      - app-network
+    healthcheck:
+       test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+       interval: 10s
+       timeout: 5s
+       retries: 5
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
-    container_name: 'rabbitmq'
+    container_name: rabbitmq
     ports:
-      - "5672:5672"   # Puerto de RabbitMQ
-      - "15672:15672" # Puerto de la interfaz de administración
+      - "5672:5672"
+      - "15672:15672"
     volumes:
-        - rabbitmq_data:/var/lib/rabbitmq/
-        - rabbitmq_log:/var/log/rabbitmq/
+      - rabbitmq_data:/var/lib/rabbitmq/
+      - rabbitmq_log:/var/log/rabbitmq/
     networks:
-        - rabbitmq-network
+      - app-network
 
 volumes:
   postgres_users_data:
@@ -54,6 +59,4 @@ volumes:
 
 networks:
   app-network:
-    driver: bridge
-  rabbitmq-network:
     driver: bridge
