@@ -18,9 +18,9 @@ const defaultPort = "8080"
 
 func main() {
 	cfg := config.LoadConfig() 
-    database.InitDatabase(cfg)
-    defer database.CloseDatabase()
-    database.Migrate()
+	database.InitDatabase(cfg)
+	defer database.CloseDatabase()
+	database.Migrate()
 
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -28,8 +28,8 @@ func main() {
 	}
 
 	db := database.GetDB()
-    userRepo := repositories.NewUserRepository(db)
-    userService := services.NewUserService(userRepo)
+	userRepo := repositories.NewUserRepository(db)
+	userService := services.NewUserService(userRepo)
 
 
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{UserService: userService}}))
