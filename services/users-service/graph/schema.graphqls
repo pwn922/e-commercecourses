@@ -1,0 +1,33 @@
+schema {
+  query: Query
+  mutation: Mutation
+}
+
+type Query {
+  getUser(id: Int!): User
+  listUsers: [User!]!
+}
+
+type Mutation {
+  register(input: UserInput!): AuthPayload
+  login(input: UserInput!): AuthPayload
+  updateUser(id: Int!, input: UserInput!): User
+}
+
+input UserInput {
+  name: String
+  email: String
+  password: String
+}
+
+type User {
+  id: Int!
+  name: String!
+  email: String!
+  password: String!
+}
+
+type AuthPayload {
+  token: String!
+  user: User!
+}

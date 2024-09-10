@@ -7,7 +7,7 @@ RUN go mod download
 
 COPY . .
 
-RUN go build -o users-service ./cmd/main.go
+RUN go build -o users-service ./cmd/server.go
 
 FROM alpine:latest
 
