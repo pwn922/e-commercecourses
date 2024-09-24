@@ -1,0 +1,56 @@
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem; /* Espaciado horizontal */
+    background-color: #534ace;
+    color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .left-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .menu-button {
+    font-size: 24px;
+    background: none;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    margin-right: 20px;
+  }
+  
+  .logo {
+    text-decoration: none;
+    color: #fff;
+    margin-right: 20px;
+  }
+  
+  .nav-items {
+    display: flex;
+    align-items: center;
+  }
+  
+  .account-link {
+    color: #fff;
+    text-decoration: none;
+    margin-left: 1rem; /* Espaciado entre "Mi cuenta" y el icono */
+    font-size: 18px;
+  }
+  
+  .user-icon {
+    width: 30px; /* Ancho del icono */
+    height: 30px; /* Altura del icono */
+    border-radius: 50%; /* Hace el círculo */
+    background-color: #2f8f37; /* Color de fondo del icono */
+    display: inline-block; /* Asegura que el icono esté en línea con el texto */
+    margin-left: 0.5rem; /* Espaciado entre el texto y el ícono */
+    
+}

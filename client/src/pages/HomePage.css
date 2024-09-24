@@ -1,0 +1,93 @@
+.home-container {
+    margin: 2rem;
+    display: flex; /* Permite colocar la barra lateral y la lista de cursos en fila */
+    width: 100%; /* Asegura que ocupe todo el ancho */
+    max-width: 100vw; /* Previene el desbordamiento */
+}
+
+.sidebar {
+    width: 250px; /* Ancho fijo para la barra lateral */
+    flex-shrink: 0; /* Previene que se reduzca */
+    padding: 1rem;
+    background-color: #f4f4f4;
+    border-right: 1px solid #ddd;
+}
+
+.sidebar h2 {
+    margin-top: 0; /* Elimina margen superior */
+    margin-bottom: 1rem;
+}
+
+.sidebar ul {
+    list-style-type: none; /* Elimina el estilo de lista */
+    padding: 0; /* Elimina el espaciado interno */
+}
+
+.sidebar li {
+    padding: 1rem;
+    cursor: pointer; /* Cambia el cursor al pasar por encima */
+    transition: background-color 0.2s; /* Transición para el fondo */
+}
+
+.sidebar li:hover {
+    background-color: #e0e0e0; /* Cambia el color de fondo al pasar el cursor */
+}
+
+.course-list {
+    flex-grow: 1; /* Permite que el contenido ocupe el espacio restante */
+    padding: 20px; /* Espaciado interno para el contenedor */
+    background-color: #f9f9f9; /* Color de fondo para el catálogo */
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.info-box {
+    background-color: #e9ecef;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px; /* Espacio entre el recuadro y el catálogo */
+}
+
+.courses {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px; /* Espaciado entre tarjetas */
+}
+
+.course-card {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 15px;
+    text-align: center; /* Centra el texto */
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden; /* Evita que el contenido se desborde */
+    transition: transform 0.2s; /* Suaviza el efecto */
+}
+
+.course-card:hover {
+    transform: scale(1.05); /* Aumenta ligeramente el tamaño */
+}
+
+.course-card img {
+    width: 100%; /* Asegura que la imagen ocupe el ancho de la tarjeta */
+    height: auto; /* Mantiene la proporción */
+    border-radius: 5px;
+}
+
+.course-card h2 {
+    font-size: 1.2em; /* Tamaño de fuente para el título */
+    height: 40px; /* Altura fija para el título */
+    overflow: hidden; /* Evita que el texto se desborde */
+    text-overflow: ellipsis; /* Agrega "..." al final */
+    white-space: nowrap; /* Evita el salto de línea */
+    margin: 10px 0; /* Espaciado arriba y abajo */
+}
+
+.course-card p {
+    margin: 5px 0; /* Espaciado para el precio */
+    font-size: 1em; /* Tamaño de fuente para el precio */
+}
