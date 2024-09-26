@@ -21,7 +21,6 @@ const NavBar: React.FC = () => {
         <CartIcon />
         <Link to="/login" className="account-link">
           Mi cuenta
-          <div className="user-icon"></div>
         </Link>
       </div>
     </nav>

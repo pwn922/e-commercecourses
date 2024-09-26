@@ -1,14 +1,14 @@
 import React from 'react';
 import './HomePage.css';
-import { useCart } from '../components/Cart/CartContext'; // Asegúrate de importar el contexto del carrito
+import { useCart } from '../components/Cart/CartContext'; 
 
 const courses = [
-  { id: 1, title: 'Curso de React', price: '$99', image: 'https://via.placeholder.com/150' },
-  { id: 2, title: 'Curso de Node.js', price: '$89', image: 'https://via.placeholder.com/150' },
-  { id: 3, title: 'Curso de CSS Avanzado', price: '$69', image: 'https://via.placeholder.com/150' },
-  { id: 4, title: 'Curso de CSS Principiante', price: '$79', image: 'https://via.placeholder.com/150' },
-  { id: 5, title: 'Curso de CSS Intermedio', price: '$79', image: 'https://via.placeholder.com/150' },
-  { id: 6, title: 'Curso de CSS Experto', price: '$99', image: 'https://via.placeholder.com/150' },
+  { id: 1, title: 'Curso de React', price: '$999', image: 'https://via.placeholder.com/150' },
+  { id: 2, title: 'Curso de Node.js', price: '$899', image: 'https://via.placeholder.com/150' },
+  { id: 3, title: 'Curso de CSS Avanzado', price: '$699', image: 'https://via.placeholder.com/150' },
+  { id: 4, title: 'Curso de CSS Principiante', price: '$799', image: 'https://via.placeholder.com/150' },
+  { id: 5, title: 'Curso de CSS Intermedio', price: '$799', image: 'https://via.placeholder.com/150' },
+  { id: 6, title: 'Curso de CSS Experto', price: '$999', image: 'https://via.placeholder.com/150' },
 ];
 
 const categories = [
@@ -16,6 +16,7 @@ const categories = [
   'Diseño Gráfico',
   'Marketing Digital',
   'Fotografía',
+  'Literatura',
   'Idiomas',
 ];
 

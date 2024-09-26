@@ -45,12 +45,3 @@ nav {
     font-size: 18px;
   }
   
-  .user-icon {
-    width: 30px; /* Ancho del icono */
-    height: 30px; /* Altura del icono */
-    border-radius: 50%; /* Hace el círculo */
-    background-color: #2f8f37; /* Color de fondo del icono */
-    display: inline-block; /* Asegura que el icono esté en línea con el texto */
-    margin-left: 0.5rem; /* Espaciado entre el texto y el ícono */
-    
-}

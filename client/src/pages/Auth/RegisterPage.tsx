@@ -1,11 +1,17 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // Asumiendo que usas React Router
+import { useNavigate } from 'react-router-dom';
 import './RegisterPage.css';
 
 const RegisterPage: React.FC = () => {
-  const [username, setUsername] = useState('');
+  // Estados para los campos requeridos
+  const [firstName, setFirstName] = useState('');
+  const [middleName, setMiddleName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false); // Estado para controlar la visibilidad de la contraseña
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // Controlar visibilidad de confirmación de contraseña
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
@@ -13,15 +19,29 @@ const RegisterPage: React.FC = () => {
     e.preventDefault();
 
     // Validación de campos vacíos
-    if (!username || !email || !password) {
+    if (!firstName || !lastName || !email || !password || !confirmPassword) {
       setErrorMessage('Por favor, completa todos los campos.');
       return;
     }
 
+    // Verificación de que las contraseñas coincidan
+    if (password !== confirmPassword) {
+      setErrorMessage('Las contraseñas no coinciden.');
+      return;
+    }
+
     // Lógica de registro (aquí deberías implementar la verificación con backend)
-    // Ejemplo de registro exitoso
-    console.log('Registro exitoso:', { username, email, password });
+    console.log('Registro exitoso:', { firstName, middleName, lastName, email, password });
+
     navigate('/home'); // Redirige a la página de inicio después de registrarse
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
   };
 
   return (
@@ -30,12 +50,31 @@ const RegisterPage: React.FC = () => {
       {errorMessage && <p className="error-message">{errorMessage}</p>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="username">Nombre de Usuario:</label>
+          <label htmlFor="firstName">Nombre:</label>
           <input 
             type="text" 
-            id="username" 
-            value={username} 
-            onChange={(e) => setUsername(e.target.value)} 
+            id="firstName" 
+            value={firstName} 
+            onChange={(e) => setFirstName(e.target.value)} 
+            required 
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="middleName">Segundo Nombre:</label>
+          <input 
+            type="text" 
+            id="middleName" 
+            value={middleName} 
+            onChange={(e) => setMiddleName(e.target.value)} 
+          />
+        </div>
+        <div className="form-group">
+          <label htmlFor="lastName">Apellido:</label>
+          <input 
+            type="text" 
+            id="lastName" 
+            value={lastName} 
+            onChange={(e) => setLastName(e.target.value)} 
             required 
           />
         </div>
@@ -51,13 +90,41 @@ const RegisterPage: React.FC = () => {
         </div>
         <div className="form-group">
           <label htmlFor="password">Contraseña:</label>
-          <input 
-            type="password" 
-            id="password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
-            required 
-          />
+          <div className="password-wrapper">
+            <input 
+              type={showPassword ? 'text' : 'password'} 
+              id="password" 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)} 
+              required 
+            />
+            <button
+              type="button"
+              className="toggle-password-btn"
+              onClick={togglePasswordVisibility}
+            >
+              {showPassword ? 'Ocultar' : 'Mostrar'}
+            </button>
+          </div>
+        </div>
+        <div className="form-group">
+          <label htmlFor="confirmPassword">Confirmar Contraseña:</label>
+          <div className="password-wrapper">
+            <input 
+              type={showConfirmPassword ? 'text' : 'password'} 
+              id="confirmPassword" 
+              value={confirmPassword} 
+              onChange={(e) => setConfirmPassword(e.target.value)} 
+              required 
+            />
+            <button
+              type="button"
+              className="toggle-password-btn"
+              onClick={toggleConfirmPasswordVisibility}
+            >
+              {showConfirmPassword ? 'Ocultar' : 'Mostrar'}
+            </button>
+          </div>
         </div>
         <button type="submit" className="btn">Registrar</button>
       </form>

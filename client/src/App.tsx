@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.css';
 import NavBar from './components/NavBar/NavBar';
-import AppRoutes from './Routes';  // Importa las rutas desde Routes.tsx
-import { BrowserRouter as Router } from 'react-router-dom'; // Router aquí
-import { CartProvider } from './components/Cart/CartContext'; // Asegúrate de ajustar la ruta
+import AppRoutes from './Routes';  
+import { BrowserRouter as Router } from 'react-router-dom'; 
+import { CartProvider } from './components/Cart/CartContext';
 
 function App() {
   return (
