@@ -1,62 +1,68 @@
 services:
-  client:
-    build:
-      context: ./client
-      dockerfile: Dockerfile
-    ports:
-      - "5173:5173"
-    networks:
-      - app-network
+  #client:
+  #  build:
+  #    context: ./client
+  #    dockerfile: Dockerfile
+  #  ports:
+  #    - "5173:5173"
+  #  networks:
+  #    - app-network
 
-  users-service:
-    build:
-      context: ./services/users-service
-      dockerfile: Dockerfile
-    ports:
-      - "8080:8080"
-    depends_on:
-      postgres-users-service:
-        condition: service_healthy
-    environment:
-      - DATABASE_URL=postgres://users_service:password@postgres-users-service:5432/users_service?sslmode=disable
-    networks:
-      - app-network
-
-  postgres-users-service:
+  #auth-service:
+  #  build:
+  #    context: ./services/auth-service
+  #    dockerfile: Dockerfile
+  #  ports:
+  #    - "8080:8080"
+  #  depends_on:
+  #    postgres-auth-service:
+  #      condition: service_healthy
+  #  environment:
+  #    - DATABASE_URL=postgres://auth_service:password@postgres-auth-service:5432/auth_service?sslmode=disable
+  #  networks:
+  #    - app-network
+  postgres:
+    container_name: container-pg
     image: postgres:latest
+    hostname: localhost
     environment:
-      POSTGRES_DB: users_service
-      POSTGRES_USER: users_service
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
     volumes:
-      - postgres_users_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
+      - ./services/auth-service/internal/database/migrations/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - "5433:5432"
-    networks:
-      - app-network
+      - "127.0.0.1:5433:5432"
+    #networks:
+      #- app-network
+      #- 
     healthcheck:
-       test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
-       interval: 10s
-       timeout: 5s
-       retries: 5
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-  rabbitmq:
-    image: rabbitmq:3-management-alpine
-    container_name: rabbitmq
-    ports:
-      - "5672:5672"
-      - "15672:15672"
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq/
-      - rabbitmq_log:/var/log/rabbitmq/
-    networks:
-      - app-network
+  #rabbitmq:
+  #  image: rabbitmq:3-management-alpine
+  #  container_name: rabbitmq
+  #  ports:
+  #    - "5672:5672"
+  #    - "15672:15672"
+  #  volumes:
+  #    - rabbitmq_data:/var/lib/rabbitmq/
+  #    - rabbitmq_log:/var/log/rabbitmq/
+  #  networks:
+  #    - app-network
 
 volumes:
-  postgres_users_data:
-  rabbitmq_data:
-  rabbitmq_log:
+  postgres_data:
+    #driver: local
+    
+#  rabbitmq_data:
+#  rabbitmq_log:
 
-networks:
-  app-network:
-    driver: bridge
+#networks:
+#  app-network:
+#    driver: bridge
+
