@@ -7,17 +7,15 @@ import (
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
-	"github.com/pwn922/users-service/graph"
-	"github.com/pwn922/users-service/internal/config"
-	"github.com/pwn922/users-service/internal/database"
-	"github.com/pwn922/users-service/internal/repositories"
-	"github.com/pwn922/users-service/internal/services"
+	"github.com/pwn922/auth-service/graph"
+	"github.com/pwn922/auth-service/internal/config"
+	"github.com/pwn922/auth-service/internal/database"
 )
 
 const defaultPort = "8080"
 
 func main() {
-	cfg := config.LoadConfig() 
+	cfg := config.LoadConfig()
 	database.InitDatabase(cfg)
 	defer database.CloseDatabase()
 	database.Migrate()
@@ -28,11 +26,8 @@ func main() {
 	}
 
 	db := database.GetDB()
-	userRepo := repositories.NewUserRepository(db)
-	userService := services.NewUserService(userRepo)
-
-
-	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: &graph.Resolver{UserService: userService}}))
+	resolver := graph.NewResolver(db)
+	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{Resolvers: resolver}))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
 	http.Handle("/query", srv)
