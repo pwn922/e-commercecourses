@@ -1,8 +1,8 @@
 package repositories
 
 import (
-	"github.com/pwn922/users-service/graph/model"
-	models "github.com/pwn922/users-service/internal/models"
+	"github.com/pwn922/auth-service/graph/model"
+	models "github.com/pwn922/auth-service/internal/models"
 )
 
 type UserRepository interface {
