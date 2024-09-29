@@ -1,0 +1,56 @@
+type User {
+    id: ID!
+    first_name: String!
+    middle_name: String!
+    last_name: String!
+    email: String!
+    role: Role!
+}
+
+type Role {
+    id: ID!
+    roleName: String!
+    description: String
+    users: [User!]!
+}
+
+type Query {
+    users: [User!]!
+    user(id: ID!): User
+    roles: [Role!]!
+    role(id: ID!): Role
+}
+
+type Mutation {
+    register(input: UserInput!): AuthResponse
+    login(input: LoginInput!): AuthResponse
+    updateUser(id: ID!, input: UserInput!): User!
+
+    #deleteUser(id: ID!): Boolean!
+    #createRole(input: RoleInput!): Role!
+    #updateRole(id: ID!, input: UpdateRole!): Role!
+    #deleteRole(id: ID!): Boolean!
+}
+
+input LoginInput {
+    email: String
+    password: String
+}
+
+input UserInput {
+    first_name: String!
+    middle_name: String!
+    last_name: String!
+    email: String!
+    password: String!
+    roleID: ID!
+}
+
+input RoleInput {
+    role_name: String!
+    description: String
+}
+
+type AuthResponse {
+    token: String!
+}
