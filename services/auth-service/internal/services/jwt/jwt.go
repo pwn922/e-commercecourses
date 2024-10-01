@@ -31,7 +31,6 @@ func (j *JWTService) GenerateAccessToken(userID string, roleID string) (string, 
             ExpiresAt: jwt.NewNumericDate(expirationTime),
         },
     }
-
     token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
     return token.SignedString(jwtSecret)
 }
@@ -41,24 +40,22 @@ func (j *JWTService) VerifyAccessToken(tokenStr string) (*Claims, error) {
     token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
         return jwtSecret, nil
     })
-
     if err != nil || !token.Valid {
         return nil, err
     }
-
     return claims, nil
 }
 
 func (j *JWTService) GenerateRefreshToken(userID string) (string, error) {
-	expirationTime := time.Now().Add(7 * 24 * time.Hour)
-	claims := &Claims{
-		UserID: userID,
-		RegisteredClaims: jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(expirationTime),
-		},
-	}
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString(refreshSecret)
+    expirationTime := time.Now().Add(7 * 24 * time.Hour)
+    claims := &Claims{
+        UserID: userID,
+        RegisteredClaims: jwt.RegisteredClaims{
+            ExpiresAt: jwt.NewNumericDate(expirationTime),
+        },
+    }
+    token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
+    return token.SignedString(refreshSecret)
 }
 
 func (j *JWTService) VerifyRefreshToken(tokenStr string) (*Claims, error) {
@@ -66,10 +63,8 @@ func (j *JWTService) VerifyRefreshToken(tokenStr string) (*Claims, error) {
     token, err := jwt.ParseWithClaims(tokenStr, claims, func(token *jwt.Token) (interface{}, error) {
         return refreshSecret, nil
     })
-
     if err != nil || !token.Valid {
         return nil, err
     }
-
     return claims, nil
 }
