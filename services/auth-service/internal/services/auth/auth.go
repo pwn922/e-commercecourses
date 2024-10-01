@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 
+	"github.com/pwn922/auth-service/graph/middlewares"
 	"github.com/pwn922/auth-service/graph/model"
 	"github.com/pwn922/auth-service/internal/models"
 	"github.com/pwn922/auth-service/internal/services/jwt"
@@ -66,8 +67,10 @@ func (a *AuthService) Login(ctx context.Context, loginInput *models.LoginUserInp
     return &models.AuthResponse{AccessToken: token}, nil
 }
 
-func (a *AuthService) GetProfileUser(ctx context.Context, id string) (*model.User, error) {
-    user, err := a.UserService.GetUser(ctx, id)
+func (a *AuthService) GetProfileUser(ctx context.Context) (*model.User, error) {
+    userID, _ := ctx.Value(middlewares.UserIDKey).(string)
+    println("userID: ", userID)
+    user, err := a.UserService.GetUser(ctx, userID)
     if err != nil || user == nil {
         return nil, err
     }
