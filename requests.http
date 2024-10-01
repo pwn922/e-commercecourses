@@ -1,0 +1,24 @@
+@AUTH_SERVICE_URL=http://localhost:8080
+
+
+### Login Request
+POST {{AUTH_SERVICE_URL}}/login
+Content-Type: application/json
+
+{
+    "email": "example@example.com",
+    "password": "password123"
+}
+
+### Register Request
+POST {{AUTH_SERVICE_URL}}/register
+Content-Type: application/json
+
+{
+    "first_name": "John",
+    "middle_name": "Doe",
+    "last_name": "Smith",
+    "email": "example@example.com",
+    "password": "a",
+    "role": ""
+}
