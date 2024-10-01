@@ -12,7 +12,7 @@ import (
 )
 
 // UpdateUser is the resolver for the updateUser field.
-func (r *mutationResolver) UpdateUser(ctx context.Context, id string, input model.UserInput) (*model.User, error) {
+func (r *mutationResolver) UpdateUser(ctx context.Context, input model.UserInput) (*model.User, error) {
 	panic(fmt.Errorf("not implemented: UpdateUser - updateUser"))
 }
 
@@ -22,8 +22,8 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 }
 
 // User is the resolver for the user field.
-func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
-	return r.AuthService.GetProfileUser(ctx, id)
+func (r *queryResolver) User(ctx context.Context) (*model.User, error) {
+	return r.AuthService.GetProfileUser(ctx)
 }
 
 // Roles is the resolver for the roles field.

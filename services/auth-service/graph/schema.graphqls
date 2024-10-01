@@ -16,13 +16,13 @@ type Role {
 
 type Query {
     users: [User!]!
-    user(id: ID!): User
+    user: User
     roles: [Role!]!
     role(id: ID!): Role
 }
 
 type Mutation {
-    updateUser(id: ID!, input: UserInput!): User!
+    updateUser(input: UserInput!): User!
 }
 
 input UserInput {
