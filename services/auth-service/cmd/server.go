@@ -41,17 +41,17 @@ func main() {
 	resolver := graph.NewResolver(authService)
 
 	srv := handler.NewDefaultServer(graph.NewExecutableSchema(graph.Config{
-		Resolvers:  resolver,
+		Resolvers: resolver,
 	}))
 
 	router := mux.NewRouter()
 	authHandlers := handlers.NewAuthHandlers(authService)
-    router.HandleFunc("/login", authHandlers.LoginHandler)
+	router.HandleFunc("/login", authHandlers.LoginHandler)
 	router.HandleFunc("/register", authHandlers.RegisterHandler)
-	
+
 	authMiddleware := middlewares.NewAuthMiddleware(jwtService)
 	router.Handle("/query", authMiddleware.Authenticate(srv))
-    router.Handle("/", playground.Handler("GraphQL playground", "/query"))
+	router.Handle("/", playground.Handler("GraphQL playground", "/query"))
 
 	log.Printf("connect to http://localhost:%s/ for GraphQL playground", defaultPort)
 	log.Fatal(http.ListenAndServe(":"+defaultPort, router))
