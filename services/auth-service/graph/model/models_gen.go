@@ -2,15 +2,6 @@
 
 package model
 
-type AuthResponse struct {
-	Token string `json:"token"`
-}
-
-type LoginInput struct {
-	Email    *string `json:"email,omitempty"`
-	Password *string `json:"password,omitempty"`
-}
-
 type Mutation struct {
 }
 
@@ -44,5 +35,5 @@ type UserInput struct {
 	LastName   string `json:"last_name"`
 	Email      string `json:"email"`
 	Password   string `json:"password"`
-	RoleID     string `json:"roleID"`
+	Role       string `json:"role"`
 }

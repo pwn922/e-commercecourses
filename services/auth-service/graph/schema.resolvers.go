@@ -11,16 +11,6 @@ import (
 	"github.com/pwn922/auth-service/graph/model"
 )
 
-// Register is the resolver for the register field.
-func (r *mutationResolver) Register(ctx context.Context, input model.UserInput) (*model.AuthResponse, error) {
-	panic(fmt.Errorf("not implemented: Register - register"))
-}
-
-// Login is the resolver for the login field.
-func (r *mutationResolver) Login(ctx context.Context, input model.LoginInput) (*model.AuthResponse, error) {
-	panic(fmt.Errorf("not implemented: Login - login"))
-}
-
 // UpdateUser is the resolver for the updateUser field.
 func (r *mutationResolver) UpdateUser(ctx context.Context, id string, input model.UserInput) (*model.User, error) {
 	panic(fmt.Errorf("not implemented: UpdateUser - updateUser"))
@@ -33,7 +23,7 @@ func (r *queryResolver) Users(ctx context.Context) ([]*model.User, error) {
 
 // User is the resolver for the user field.
 func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
-	panic(fmt.Errorf("not implemented: User - user"))
+	return r.AuthService.GetProfileUser(ctx, id)
 }
 
 // Roles is the resolver for the roles field.
