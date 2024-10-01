@@ -1,10 +1,10 @@
 package repositories
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/google/uuid"
-	"github.com/pwn922/auth-service/graph/model"
 	models "github.com/pwn922/auth-service/internal/models"
 	"gorm.io/gorm"
 )
@@ -17,35 +17,23 @@ func NewUserRepository(db *gorm.DB) UserRepository {
 	return &userRepository{db: db}
 }
 
-// ARREGLAR LO DE MODELS.ROLE
-func (r *userRepository) Create(newUserInput *model.UserInput) (*models.User, error) {
-	var role models.Role
-	if err := r.db.Where("role_id = ?", newUserInput.RoleID).First(&role).Error; err != nil {
-		return nil, fmt.Errorf("rol no encontrado: %v", err)
-	}
-
-	// Aquí se debería hacer el hash de la contraseña
-	//	hashedPassword := hashPassword(newUserInput.Password)
-
-	newUser := &models.User{
-		ID:       uuid.New().String(),
-		FirstName:    newUserInput.FirstName,
-		MiddleName:   newUserInput.MiddleName,
-		LastName:     newUserInput.LastName,
-		Email:        newUserInput.Email,
-		PasswordHash: newUserInput.Password, // HASHEAR ANTES LA CONTRASEÑA
-		Role:       role,
-	}
-
+func (r *userRepository) Create(newUser *models.User) (*models.User, error) {
 	if err := r.db.Create(newUser).Error; err != nil {
 		return nil, err
 	}
 	return newUser, nil
 }
 
-func (r *userRepository) GetByID(id int) (*models.User, error) {
+func (r *userRepository) GetByID(id string) (*models.User, error) {
+	if _, err := uuid.Parse(id); err != nil {
+		return nil, errors.New("invalid UUID format")
+	}
+
 	var user models.User
-	if err := r.db.First(&user, id).Error; err != nil {
+	if err := r.db.Preload("Role").First(&user, "id = ?", id).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, fmt.Errorf("user with id %s not found", id)
+		}
 		return nil, err
 	}
 	return &user, nil
@@ -59,31 +47,19 @@ func (r *userRepository) List() ([]*models.User, error) {
 	return users, nil
 }
 
-func (r *userRepository) GetByEmail(email string) (*models.User, error) {
+func (r *userRepository) GetByField(field string, value string) (*models.User, error) {
 	var user models.User
-	if err := r.db.Where("email = ?", email).First(&user).Error; err != nil {
+	if err := r.db.Where(fmt.Sprintf("%s = ?", field), value).First(&user).Error; err != nil {
 		return nil, err
 	}
 	return &user, nil
 }
 
-func (r *userRepository) Update(updateUserInput *model.UserInput, id int) (*models.User, error) {
-	updateUser := &models.User{
-		//I:           id,
-		FirstName:    updateUserInput.FirstName,
-		MiddleName:   updateUserInput.MiddleName,
-		LastName:     updateUserInput.LastName,
-		Email:        updateUserInput.Email,
-		PasswordHash: updateUserInput.Password,
-		//Role:       string(*newUserInput.Role),
-		//		Phone:      *newUserInput.Phone,
-		//Address: *newUserInput.Address,
-	}
-
+func (r *userRepository) Update(updateUser *models.User) (*models.User, error) {
 	err := r.db.Save(&updateUser).Error
 	return updateUser, err
 }
 
-func (r *userRepository) DeleteByID(id int) error {
+func (r *userRepository) DeleteByID(id string) error {
 	return r.db.Delete(&models.User{}, id).Error
 }
