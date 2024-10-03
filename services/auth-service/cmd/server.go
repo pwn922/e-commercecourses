@@ -49,6 +49,8 @@ func main() {
 	router.HandleFunc("/login", authHandlers.LoginHandler)
 	router.HandleFunc("/register", authHandlers.RegisterHandler)
 
+	router.Use(middlewares.CORSMiddleware)
+
 	authMiddleware := middlewares.NewAuthMiddleware(jwtService)
 	router.Handle("/query", authMiddleware.Authenticate(srv))
 	router.Handle("/", playground.Handler("GraphQL playground", "/query"))

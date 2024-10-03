@@ -25,7 +25,7 @@ func NewAuthHandlers(authService *auth.AuthService) *AuthHandlers {
 func (h *AuthHandlers) LoginHandler(w http.ResponseWriter, r *http.Request) {
 	var loginInput models.LoginUserInput
 
-	//Testing para que me de acceso al fetch de parte del frontend
+	//Testing para que me de acceso al fetch de parte del frontend, debido al problema de CORS
 	//--------
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
@@ -57,6 +57,18 @@ func (h *AuthHandlers) LoginHandler(w http.ResponseWriter, r *http.Request) {
 
 func (h *AuthHandlers) RegisterHandler(w http.ResponseWriter, r *http.Request) {
 	var userInput models.RegisterUserInput
+
+	//Testing para que me de acceso al fetch de parte del frontend, debido al problema de CORS
+	//--------
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS")
+	w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
+	if r.Method == http.MethodOptions {
+		w.WriteHeader(http.StatusOK)
+		return
+	}
+	//----------------------
 
 	if err := json.NewDecoder(r.Body).Decode(&userInput); err != nil {
 		http.Error(w, "Invalid input: failed to parse JSON", http.StatusBadRequest)

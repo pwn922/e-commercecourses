@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { registerUser } from '../../api/authService';
 import './RegisterPage.css';
 
 const RegisterPage: React.FC = () => {
@@ -15,11 +16,11 @@ const RegisterPage: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     // Validación de campos vacíos
-    if (!firstName || !lastName || !email || !password || !confirmPassword) {
+    if (!firstName || !middleName || !lastName || !email || !password || !confirmPassword) {
       setErrorMessage('Por favor, completa todos los campos.');
       return;
     }
@@ -29,11 +30,19 @@ const RegisterPage: React.FC = () => {
       setErrorMessage('Las contraseñas no coinciden.');
       return;
     }
+    try {
+      const token = await registerUser(firstName,middleName,lastName,email, password)
 
-    // Lógica de registro (aquí deberías implementar la verificación con backend)
-    console.log('Registro exitoso:', { firstName, middleName, lastName, email, password });
-
-    navigate('/home'); // Redirige a la página de inicio después de registrarse
+      if (token) {
+        console.log('Token recibido:', token);
+        //localStorage.setItem('token', token);
+        navigate('/home'); 
+    } else {
+        setErrorMessage('No se recibió el token.');
+    }
+    } catch (error: any) {
+      setErrorMessage(error.message || 'Error desconocido');
+    }
   };
 
   const togglePasswordVisibility = () => {

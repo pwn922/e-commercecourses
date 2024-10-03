@@ -23,6 +23,11 @@ const NavBar: React.FC = () => {
           Mi cuenta
         </Link>
       </div>
+      <div className="nav-items">
+        <Link to="/user" className="account-link">
+          Perfil
+        </Link>
+      </div>
     </nav>
   );
 };

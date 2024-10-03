@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { loginUser } from '../../api/authService';
 import './LoginPage.css';
 
 const LoginPage: React.FC = () => {
@@ -18,33 +19,14 @@ const LoginPage: React.FC = () => {
       setErrorMessage('Por favor, completa todos los campos.');
       return;
     }
-
     setLoading(true);
-
+    //[Insertar descripcion]
     try {
-      // Temporal mientras, para ir comprobando el login
-      const response = await fetch('http://localhost:8080/login', { //Deberia ir en un config, .env
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-
-      const data = await response.json();
-      const token = data.accessToken
-
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Error al iniciar sesión');
-      }
+      const token = await loginUser(email, password)
 
       if (token) {
         console.log('Token recibido:', token);
-        //localStorage.setItem('token', token);
+        localStorage.setItem('token', token);
         navigate('/home'); 
     } else {
         setErrorMessage('No se recibió el token.');
